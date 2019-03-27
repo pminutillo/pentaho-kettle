@@ -217,6 +217,13 @@ public class PanCommandExecutor extends AbstractBaseCommandExecutor {
               "Pan.Log.ProcessingEndAfterLong", "Pan.Log.ProcessingEndAfterLonger", "Pan.Log.ProcessingEndAfterLongest" );
       getResult().setElapsedTimeMillis( stop.getTime() - start.getTime() );
 
+      // if a CountDownLatch was added to the trans, wait for threads to finish
+      if( trans.getSignalComplete() != null ){
+        getLog().logMinimal("CountDownLatch found! Waiting for threads to finish ...");
+        trans.getSignalComplete().await();
+        getLog().logMinimal("Done! Threads completed.");
+      }
+
       if ( getResult().getNrErrors() == 0 ) {
 
         trans.printStats( completionTimeSeconds );

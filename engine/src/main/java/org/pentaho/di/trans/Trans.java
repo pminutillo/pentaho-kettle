@@ -40,13 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -548,6 +542,16 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
   private Map<String, Object> extensionDataMap;
 
   private ExecutorService heartbeat = null; // this transformations's heartbeat scheduled executor
+
+  private CountDownLatch signalComplete = null;
+
+  public CountDownLatch getSignalComplete() {
+    return signalComplete;
+  }
+
+  public void setSignalComplete(CountDownLatch signalComplete) {
+    this.signalComplete = signalComplete;
+  }
 
   /**
    * Instantiates a new transformation.

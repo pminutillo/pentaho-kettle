@@ -238,6 +238,13 @@ public class KitchenCommandExecutor extends AbstractBaseCommandExecutor {
             "Kitchen.Log.ProcessEndAfterLonger", "Kitchen.Log.ProcessEndAfterLongest" );
     getResult().setElapsedTimeMillis( stop.getTime() - start.getTime() );
 
+    // if a CountDownLatch was added to the trans, wait for threads to finish
+    if( job.getSignalComplete() != null ){
+      getLog().logMinimal("CountDownLatch found! Waiting for threads to finish ...");
+      job.getSignalComplete().await();
+      getLog().logMinimal("Done! Threads completed.");
+    }
+
     return exitWithStatus( returnCode );
   }
 

@@ -33,13 +33,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.vfs2.FileName;
@@ -213,6 +207,15 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   /** Int value for storage job statuses */
   private AtomicInteger status;
 
+  private CountDownLatch signalComplete = null;
+
+  public CountDownLatch getSignalComplete() {
+    return signalComplete;
+  }
+
+  public void setSignalComplete(CountDownLatch signalComplete) {
+    this.signalComplete = signalComplete;
+  }
   /**
    * <p>
    * This enum stores bit masks which are used to manipulate with statuses over field {@link Job#status}
